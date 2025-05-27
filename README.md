@@ -7,7 +7,9 @@
 
 ## 📦 Description
 
-**Forge & Fable** est un module universel de crafting et de récolte pour Foundry VTT, compatible avec tous les systèmes de jeu. Il permet aux joueurs de fabriquer des objets à partir d'ingrédients définis, et de récolter des ressources selon l'environnement. Ce module a été conçu pour être entièrement visuel, responsive, immersif, et simple d'utilisation.
+**Forge & Fable** est un module universel de crafting et de récolte pour Foundry VTT, compatible avec tous les systèmes de jeu.  
+Il permet aux joueurs de fabriquer des objets à partir d'ingrédients définis, et de récolter des ressources selon l'environnement.  
+Ce module a été conçu pour être entièrement **visuel**, **responsive**, **immersif** et **simple d'utilisation**.
 
 ---
 
@@ -41,6 +43,45 @@
 - Affichage dans le chat
 - Icône par défaut utilisée si l’objet n’existe pas
 - Interface responsive et cohérente avec les autres fenêtres
+
+---
+
+## 🧩 Installation
+
+- Copier le dossier du module dans `modules/forge-and-fable`
+- Activer le module dans les paramètres de Foundry
+- Utiliser une macro pour ouvrir l’interface :
+  - `game.forgeFable.open()` pour le **craft**
+  - `game.forgeFable.openHarvest()` pour la **récolte**
+
+---
+
+## 📌 Compatibilité
+
+- Compatible **Foundry VTT v13+**
+- Préparé pour la compatibilité avec **ApplicationV2**
+- Testé avec tous systèmes (items de type *consumable*, *loot*, etc.)
+
+---
+
+## 🖼️ Icônes & Style
+
+- Les icônes sont situées dans `assets/` (par défaut : `default-icon.webp`)
+- Style **unifié et responsive** pour :
+  - Fabrication
+  - Création de recettes
+  - Récolte
+- Toutes les interfaces adoptent le **style parcheminé et propre** de l’interface principale
+
+---
+
+## 🚧 À venir
+
+- Ajout d’une **interface MJ** pour consulter, modifier et supprimer des recettes existantes
+- Gestion de **récolte conditionnelle** (heures, rareté, saison…)
+- **Génération aléatoire** de recettes ou ingrédients rares
+- Système d’**amélioration ou de transformation** d’objets
+- Support **multilingue** (FR/EN)
 
 ---
 
