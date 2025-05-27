@@ -1,0 +1,54 @@
+<form class="forge-recipe-form" style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0.5rem;">
+  <!-- Colonne gauche -->
+  <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 1rem;">
+    <fieldset style="border: 1px solid #8884; border-radius: 6px; padding: 0.5rem;">
+      <legend><strong>Métier</strong></legend>
+      <select name="metier" class="form-control">
+        <option>Alchimiste</option>
+        <option>Cuisinier</option>
+        <option>Forgeron</option>
+      </select>
+    </fieldset>
+
+    <fieldset style="border: 1px solid #8884; border-radius: 6px; padding: 0.5rem;">
+      <legend><strong>Outil requis</strong></legend>
+      <input type="text" name="tool" class="form-control" />
+    </fieldset>
+
+    <fieldset style="border: 1px solid #8884; border-radius: 6px; padding: 0.5rem;">
+      <legend><strong>Ingrédients</strong></legend>
+      <div class="ingredients-list" style="display: flex; flex-direction: column; gap: 0.25rem;">
+        <div class="ingredient" style="display: flex; gap: 0.5rem;">
+          <input type="text" placeholder="Nom" name="ingredient-name" class="form-control" />
+          <input type="number" placeholder="Qté" name="ingredient-qty" class="form-control" style="width: 60px;" min="1" value="1" />
+        </div>
+      </div>
+      <button type="button" class="add-ingredient" style="margin-top: 0.5rem;">➕ Ajouter un ingrédient</button>
+    </fieldset>
+  </div>
+
+  <!-- Colonne droite -->
+  <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 1rem;">
+    <fieldset style="border: 1px solid #8884; border-radius: 6px; padding: 0.5rem;">
+      <legend><strong>Nom de la recette</strong></legend>
+      <input type="text" name="name" class="form-control" required />
+    </fieldset>
+
+    <fieldset style="border: 1px solid #8884; border-radius: 6px; padding: 0.5rem;">
+      <legend><strong>Résultat</strong></legend>
+      <input type="text" name="result-name" class="form-control" placeholder="Nom de l'objet" required />
+      <select name="result-rarity" class="form-control" style="margin-top: 0.25rem;">
+        <option>Commun</option>
+        <option>Inhabituel</option>
+        <option>Rare</option>
+        <option>Épique</option>
+        <option>Légendaire</option>
+      </select>
+      <textarea name="result-description" class="form-control" rows="4" placeholder="Description"></textarea>
+    </fieldset>
+
+    <div style="text-align: right;">
+      <button type="submit" class="create-button">Créer la recette</button>
+    </div>
+  </div>
+</form>

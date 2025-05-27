@@ -1,0 +1,118 @@
+[
+  {
+    "name": "Potion de soin",
+    "img": "",
+    "metier": "Alchimiste",
+    "tool": "Alambic",
+    "toolImg": "",
+    "ingredients": [
+      {
+        "name": "Herbe médicinale",
+        "qty": 2,
+        "img": ""
+      },
+      {
+        "name": "Flacon vide",
+        "qty": 1,
+        "img": ""
+      }
+    ],
+    "result": {
+      "name": "Potion de soin",
+      "description": "Une potion simple qui restaure 1d6 points de vie.",
+      "rarity": "Commun"
+    }
+  },
+  {
+    "name": "Soupe nourrissante",
+    "img": "",
+    "metier": "Cuisinier",
+    "tool": "Chaudron",
+    "toolImg": "",
+    "ingredients": [
+      {
+        "name": "Viande crue",
+        "qty": 1,
+        "img": ""
+      },
+      {
+        "name": "Légumes frais",
+        "qty": 2,
+        "img": ""
+      }
+    ],
+    "result": {
+      "name": "Soupe nourrissante",
+      "description": "Rend de la vigueur et supprime l’état affaibli.",
+      "rarity": "Inhabituel"
+    }
+  },
+  {
+    "name": "Épée courte en fer",
+    "img": "",
+    "metier": "Forgeron",
+    "tool": "Enclume",
+    "toolImg": "",
+    "ingredients": [
+      {
+        "name": "Lingot de fer",
+        "qty": 2,
+        "img": ""
+      },
+      {
+        "name": "Bois solide",
+        "qty": 1,
+        "img": ""
+      }
+    ],
+    "result": {
+      "name": "Épée courte en fer",
+      "description": "Une arme tranchante standard, forgée avec soin.",
+      "rarity": "Rare"
+    }
+  },
+  {
+    "name": "Potion de mana",
+    "metier": "Alchimiste",
+    "tool": "Alambic",
+    "ingredients": [
+      {
+        "name": "Herbe magique",
+        "qty": 2
+      },
+      {
+        "name": "Flacon vide",
+        "qty": 1
+      }
+    ],
+    "result": {
+      "name": "Potion de mana",
+      "description": "Une potion simple qui restaure 1d6 de mana.",
+      "rarity": "Commun"
+    }
+  },
+  {
+    "name": "Lame exaltée",
+    "metier": "Forgeron",
+    "tool": "Enclume",
+    "ingredients": [
+      {
+        "name": "Sel de dragon",
+        "qty": 1
+      },
+      {
+        "name": "Corne de démon",
+        "qty": 4
+      },
+      {
+        "name": "Adamantite",
+        "qty": 3
+      }
+    ],
+    "result": {
+      "name": "Lame exaltée",
+      "description": "Une arme surpuissante.",
+      "rarity": "Légendaire"
+    }
+  }
+]

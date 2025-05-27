@@ -1,0 +1,120 @@
+/* ========================================
+   Base commune pour toutes les interfaces
+   ======================================== */
+.forge-ui {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  font-size: 14px;
+}
+
+/* ============================
+   Champs communs (select, input, textarea)
+   ============================ */
+.forge-ui select,
+.forge-ui input,
+.forge-ui textarea {
+  width: 100%;
+  padding: 0.2rem;
+  margin-bottom: 0.5rem;
+  background-color: #f9f9f9;
+  color: #333;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+/* =======================
+   Sections encadrées
+   ======================= */
+.forge-ui .section,
+.forge-ui fieldset {
+  border: 1px solid #888;
+  border-radius: 6px;
+  padding: 0.5rem;
+  background-color: #f0f0f0;
+}
+
+/* =======================
+   Titres de sections
+   ======================= */
+.forge-ui legend {
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  padding: 0 0.5rem;
+  border: 1px solid #888;
+  background-color: #e8e8e8;
+  border-radius: 4px;
+}
+
+/* =======================
+   Liste des ingrédients
+   ======================= */
+.forge-ui #ingredients .ingredient,
+.forge-ui .ingredient {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* =======================
+   Images des objets
+   ======================= */
+.forge-ui img {
+  border: 1px solid #aaa;
+  background: #fff;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* =======================
+   Icônes standardisées
+   ======================= */
+.forge-ui .ingredient img,
+.forge-ui #resultat img {
+  width: 32px;
+  height: 32px;
+}
+
+/* =======================
+   Titres et texte
+   ======================= */
+.forge-ui h3 {
+  margin: 0.25rem 0;
+}
+
+/* =======================
+   Boutons d'action
+   ======================= */
+.forge-ui .create-button,
+.forge-ui button[type="submit"],
+.forge-ui button#craft-button {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  background-color: #ddd;
+  color: #000000;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  width: 100%;
+  cursor: pointer;
+}
+
+.forge-ui .create-button:hover,
+.forge-ui button[type="submit"]:hover,
+.forge-ui button#craft-button:hover {
+  background-color: #ccc;
+}
+
+/* =======================
+   Couleurs de rareté
+   ======================= */
+.forge-ui .rarity.Commun      { color: rgb(93, 87, 87); }
+.forge-ui .rarity.Inhabituel  { color: #36b825; }
+.forge-ui .rarity.Rare        { color: #0070dd; }
+.forge-ui .rarity.Épique      { color: #a335ee; }
+.forge-ui .rarity.Légendaire  { color: #ff8000; }

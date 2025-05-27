@@ -1,0 +1,28 @@
+<div class="forge-ui">
+
+  <fieldset class="section">
+    <legend>Artisanat</legend>
+
+    <label for="metier"><strong>Métiers :</strong></label>
+    <select id="metier">
+      {{#each metiers}}
+      <option value="{{this}}">{{this}}</option>
+      {{/each}}
+    </select>
+
+    <label for="recette"><strong>Recettes :</strong></label>
+    <select id="recette"></select>
+  </fieldset>
+
+  <fieldset class="section">
+    <legend>Ingrédients requis</legend>
+    <div id="ingredients"></div>
+  </fieldset>
+
+  <fieldset class="section">
+    <legend>Résultat</legend>
+    <div id="resultat"></div>
+  </fieldset>
+
+  <button id="craft-button">Fabriquer</button>
+</div>

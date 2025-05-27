@@ -1,0 +1,25 @@
+<form class="forge-harvest-form" style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0.5rem;">
+  <!-- Colonne gauche -->
+  <div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 1rem;">
+    <fieldset style="border: 1px solid #0000; border-radius: 6px; padding: 0.5rem;">
+      <legend><strong>Choix de l'environnement</strong></legend>
+      <select id="harvest-biome" class="form-control">
+        <option value="forêt">Forêt</option>
+        <option value="montagne">Montagne</option>
+        <option value="marais">Marais</option>
+      </select>
+    </fieldset>
+    <button type="button" id="harvest-button" class="create-button">Récolter</button>
+  </div>
+
+  <!-- Colonne droite -->
+  <div id="harvest-result" style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 1rem;">
+    <fieldset style="border: 1px solid #8884; border-radius: 6px; padding: 0.5rem;">
+      <legend><strong>Résultat</strong></legend>
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <img id="harvest-icon" src="modules/forge-and-fable/assets/default-icon.webp" width="32" height="32" />
+        <span id="harvest-name">Aucun objet récolté</span>
+      </div>
+    </fieldset>
+  </div>
+</form>
