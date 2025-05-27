@@ -22,8 +22,19 @@
     "styles.css"
   ],
   "languages": [],
+  "media": [
+  {
+    "type": "cover",
+    "url": "https://i.imgur.com/OCftw8l.png",
+    "caption": "Forge & Fable"
+  },
+  {
+    "type": "setup",
+    "url": "https://i.imgur.com/OCftw8l.png"
+  }
+],
   "packs": [],
-  "manifest": "https://raw.githubusercontent.com/Vekamel/forge-and-fable/refs/heads/main/module.json",
+  "manifest": "https://raw.githubusercontent.com/Vekamel/forge-and-fable/main/module.json",
   "download": "https://github.com/Vekamel/forge-and-fable/releases/download/v1.0.0/forge-and-fable.zip",
   "url": "https://github.com/Vekamel/forge-and-fable"
 }
