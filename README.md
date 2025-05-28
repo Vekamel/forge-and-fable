@@ -1,6 +1,6 @@
 # Forge & Fable — Module de Crafting et Récolte pour Foundry VTT
 
-**Version : 1.4.0**  
+**Version : 1.0.1**  
 **Auteur : Vekamel**
 
 ---
@@ -16,6 +16,7 @@ Ce module a été conçu pour être entièrement **visuel**, **responsive**, **i
 ## 🔧 Fonctionnalités
 
 ### 🛠️ Interface de fabrication (joueurs)
+
 - Accessible via une macro ou `game.forgeFable.open()`
 - Choix du métier via une liste déroulante (Alchimiste, Forgeron, etc.)
 - Affichage des recettes disponibles selon le métier sélectionné
@@ -27,18 +28,21 @@ Ce module a été conçu pour être entièrement **visuel**, **responsive**, **i
 - Entièrement responsive et stylisé façon parchemin
 
 ### 📜 Création de recettes (MJ)
+
 - Accessible via un bouton "Ajouter une recette" visible uniquement pour le MJ dans l’interface joueur
 - Interface en `Dialog` harmonisée avec l’interface joueur
 - Ajout d’ingrédients dynamiques
 - Choix du métier via liste déroulante
 - Saisie du nom, description, rareté et outil requis
-- Sauvegarde des recettes dans `data/recipes.json`
+- Sauvegarde automatique des recettes dans `worlds/<nom-du-monde>/forge-and-fable/recipes.json` *(au lieu du module, pour éviter les pertes lors des mises à jour)*
+- Création automatique du dossier `forge-and-fable` si nécessaire
 - Interface redimensionnable et responsive
 
 ### 🌿 Récolte (joueurs)
+
 - Macro MJ : `game.forgeFable.openHarvest()` ou bouton via macro
 - Sélection du type d’environnement (forêt, montagne, marais, etc.)
-- Récolte aléatoire parmi les objets définis dans `data/harvestables.json`
+- Récolte aléatoire parmi les objets définis dans `modules/forge-and-fable/data/harvestables.json`
 - Ajout automatique de l’objet récolté à l’inventaire du token
 - Affichage dans le chat
 - Icône par défaut utilisée si l’objet n’existe pas
@@ -87,7 +91,7 @@ Ce module a été conçu pour être entièrement **visuel**, **responsive**, **i
 
 ## 📁 Structure des données
 
-### `data/recipes.json`
+### `worlds/mon-monde/forge-and-fable/recipes.json`
 ```json
 [
   {

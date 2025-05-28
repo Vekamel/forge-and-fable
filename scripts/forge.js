@@ -7,7 +7,7 @@ Hooks.once("ready", async () => {
     if (!actor) return ui.notifications.warn("Sélectionnez un token.");
 
     const metiers = await fetch("modules/forge-and-fable/data/metiers.json").then(r => r.json());
-    const recipes = await fetch("modules/forge-and-fable/data/recipes.json").then(r => r.json());
+    const recipes = await fetch("worlds/" + game.world.id + "/forge-and-fable/recipes.json").then(r => r.json()).catch(() => []);
 
     const content = await renderTemplate("modules/forge-and-fable/templates/forge-ui.html", { metiers, recipes });
     new Dialog({
@@ -138,9 +138,7 @@ function setupLogic(html, actor, allRecipes) {
 
 // Interface MJ – Dialog redimensionnable
 function openRecipeCreationDialog() {
-  if (!game.user.isGM) {
-    return ui.notifications.warn("Seul un MJ peut créer une recette.");
-  }
+  if (!game.user.isGM) return ui.notifications.warn("Seul un MJ peut créer une recette.");
 
   const content = renderTemplate("modules/forge-and-fable/templates/recipe-manager.html");
 
@@ -149,11 +147,10 @@ function openRecipeCreationDialog() {
       title: "Création de recette – Forge & Fable",
       content: html,
       buttons: {},
-      render: (html) => {
+      render: html => {
         html.find(".add-ingredient").on("click", () => {
           const container = html.find(".ingredients-list");
-          const newRow = $(`
-            <div class="ingredient" style="display: flex; gap: 0.5rem;">
+          const newRow = $(`<div class="ingredient" style="display: flex; gap: 0.5rem;">
               <input type="text" placeholder="Nom" name="ingredient-name" class="form-control" />
               <input type="number" placeholder="Qté" name="ingredient-qty" class="form-control" style="width: 60px;" min="1" value="1" />
             </div>`);
@@ -163,22 +160,19 @@ function openRecipeCreationDialog() {
         html.find("form").on("submit", async ev => {
           ev.preventDefault();
           const form = new FormData(ev.target);
-
           const ingredients = [];
           const names = html.find("input[name='ingredient-name']").map((i, el) => el.value).get();
           const qtys = html.find("input[name='ingredient-qty']").map((i, el) => el.value).get();
 
           for (let i = 0; i < names.length; i++) {
-            if (names[i]) {
-              ingredients.push({ name: names[i], qty: parseInt(qtys[i]) || 1 });
-            }
+            if (names[i]) ingredients.push({ name: names[i], qty: parseInt(qtys[i]) || 1 });
           }
 
           const newRecipe = {
             name: form.get("name"),
             metier: form.get("metier"),
             tool: form.get("tool"),
-            ingredients: ingredients,
+            ingredients,
             result: {
               name: form.get("result-name"),
               description: form.get("result-description"),
@@ -186,15 +180,30 @@ function openRecipeCreationDialog() {
             }
           };
 
-          const filePath = "modules/forge-and-fable/data/recipes.json";
-          const existing = await fetch(filePath).then(r => r.json());
+          const folder = `worlds/${game.world.id}/forge-and-fable/`;
+          const path = `${folder}recipes.json`;
+          const filename = "recipes.json";
+
+          // Vérifie si le dossier existe et le crée si nécessaire
+          await FilePicker.implementation.browse("data", folder)
+            .catch(async () => {
+              await FilePicker.implementation.createDirectory("data", folder, {});
+            });
+
+          // Charge les données existantes ou crée une nouvelle liste
+          let existing = [];
+          try {
+            const response = await fetch(path);
+            existing = await response.json();
+          } catch (e) {
+            existing = [];
+          }
+
           existing.push(newRecipe);
-
           const blob = new Blob([JSON.stringify(existing, null, 2)], { type: "application/json" });
-          const filename = filePath.split("/").pop();
 
-          await FilePicker.upload("data", filePath.replace(filename, ""), new File([blob], filename), {}, { notify: true });
-          ui.notifications.info("Recette ajoutée avec succès !");
+          await FilePicker.implementation.upload("data", folder, new File([blob], filename), {}, { notify: true });
+          ui.notifications.info("Recette ajoutée dans le monde !");
           dialog.close();
         });
       }
