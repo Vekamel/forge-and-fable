@@ -32,6 +32,8 @@ function getItemImageByName(name) {
   return img;
 }
 
+forge.js //// Ajout du tri
+
 // Logique interface joueur
 function setupLogic(html, actor, allRecipes) {
   const metierSelect = html.find("#metier");
@@ -40,9 +42,25 @@ function setupLogic(html, actor, allRecipes) {
   const resultDiv = html.find("#resultat");
   const craftBtn = html.find("#craft-button");
 
+  // Ajout : sélectionner les nouveaux filtres
+  const recetteSearch = html.find("#recette-search");
+  const rareteFilter = html.find("#rarete-filter");
+
   function refreshRecettes() {
     const metier = metierSelect.val();
-    const filtered = allRecipes.filter(r => r.metier === metier);
+    const searchTerm = recetteSearch.val().toLowerCase();
+    const rarete = rareteFilter.val();
+
+    let filtered = allRecipes.filter(r => r.metier === metier);
+
+    if (searchTerm) {
+      filtered = filtered.filter(r => r.name.toLowerCase().includes(searchTerm));
+    }
+
+    if (rarete) {
+      filtered = filtered.filter(r => r.result.rarity === rarete);
+    }
+
     recetteSelect.empty();
     filtered.forEach((r, i) => recetteSelect.append(`<option value="${i}">${r.name}</option>`));
     recetteSelect.data("filtered", filtered);
@@ -132,6 +150,10 @@ function setupLogic(html, actor, allRecipes) {
   metierSelect.on("change", refreshRecettes);
   recetteSelect.on("change", updateRecette);
   craftBtn.on("click", craft);
+
+  // Ajout : events sur les nouveaux filtres
+  recetteSearch.on("input", refreshRecettes);
+  rareteFilter.on("change", refreshRecettes);
 
   if (metierSelect.val()) refreshRecettes();
 }

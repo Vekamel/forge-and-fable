@@ -1,111 +1,188 @@
-# Forge & Fable — Module de Crafting et Récolte pour Foundry VTT
 
-**Version : 1.0.1**  
-**Auteur : Vekamel**
+# 📜 Forge & Fable — Mode d'emploi
 
----
+## Introduction
 
-## 📦 Description
+**Forge & Fable** est un module autonome pour Foundry VTT v13+, permettant :
+- la **fabrication d'objets** par les joueurs,
+- la **récolte de ressources**,
+- la **création de nouvelles recettes** par le MJ.
 
-**Forge & Fable** est un module universel de crafting et de récolte pour Foundry VTT, compatible avec tous les systèmes de jeu.  
-Il permet aux joueurs de fabriquer des objets à partir d'ingrédients définis, et de récolter des ressources selon l'environnement.  
-Ce module a été conçu pour être entièrement **visuel**, **responsive**, **immersif** et **simple d'utilisation**.
-
----
-
-## 🔧 Fonctionnalités
-
-### 🛠️ Interface de fabrication (joueurs)
-
-- Accessible via une macro ou `game.forgeFable.open()`
-- Choix du métier via une liste déroulante (Alchimiste, Forgeron, etc.)
-- Affichage des recettes disponibles selon le métier sélectionné
-- Affichage des ingrédients requis, quantités possédées, et icônes associées
-- Vérification automatique des ingrédients dans l’inventaire du token sélectionné
-- Création de l’objet final (avec image et description) dans l’inventaire
-- Affichage d’un message dans le chat lors de la fabrication
-- Couleur dynamique du nom de l'objet selon la rareté
-- Entièrement responsive et stylisé façon parchemin
-
-### 📜 Création de recettes (MJ)
-
-- Accessible via un bouton "Ajouter une recette" visible uniquement pour le MJ dans l’interface joueur
-- Interface en `Dialog` harmonisée avec l’interface joueur
-- Ajout d’ingrédients dynamiques
-- Choix du métier via liste déroulante
-- Saisie du nom, description, rareté et outil requis
-- Sauvegarde automatique des recettes dans `worlds/<nom-du-monde>/forge-and-fable/recipes.json` *(au lieu du module, pour éviter les pertes lors des mises à jour)*
-- Création automatique du dossier `forge-and-fable` si nécessaire
-- Interface redimensionnable et responsive
-
-### 🌿 Récolte (joueurs)
-
-- Macro MJ : `game.forgeFable.openHarvest()` ou bouton via macro
-- Sélection du type d’environnement (forêt, montagne, marais, etc.)
-- Récolte aléatoire parmi les objets définis dans `modules/forge-and-fable/data/harvestables.json`
-- Ajout automatique de l’objet récolté à l’inventaire du token
-- Affichage dans le chat
-- Icône par défaut utilisée si l’objet n’existe pas
-- Interface responsive et cohérente avec les autres fenêtres
+Le module fonctionne avec un système de fichiers JSON simples, modifiables, et une interface claire inspirée du style parcheminé fantasy.
 
 ---
 
-## 🧩 Installation
+## Installation
 
-- Copier le dossier du module dans `modules/forge-and-fable`
-- Activer le module dans les paramètres de Foundry
-- Utiliser une macro pour ouvrir l’interface :
-  - `game.forgeFable.open()` pour le **craft**
-  - `game.forgeFable.openHarvest()` pour la **récolte**
+1. Copier le dossier `Forge & Fable` dans le répertoire `modules/` de Foundry VTT.
+2. Activer le module dans les paramètres du monde.
 
 ---
 
-## 📌 Compatibilité
+## Fonctionnalités
 
-- Compatible **Foundry VTT v13+**
-- Préparé pour la compatibilité avec **ApplicationV2**
-- Testé avec tous systèmes (items de type *consumable*, *loot*, etc.)
+### ⚒️ Fabrication (Forge)
 
----
+Accessible via une **macro** ou un bouton d’interface.
 
-## 🖼️ Icônes & Style
+- Choisir un métier (liste configurable dans `data/metiers.json`).
+- Sélectionner une recette disponible (dans `data/recipes.json`).
+- Vérifier les ingrédients et outils requis.
+- Cliquer sur **Fabriquer** pour consommer les ingrédients et obtenir l’objet.
 
-- Les icônes sont situées dans `assets/` (par défaut : `default-icon.webp`)
-- Style **unifié et responsive** pour :
-  - Fabrication
-  - Création de recettes
-  - Récolte
-- Toutes les interfaces adoptent le **style parcheminé et propre** de l’interface principale
+#### Données utilisées :
+- `data/metiers.json` → liste des métiers
+- `data/recipes.json` → liste des recettes
 
----
-
-## 🚧 À venir
-
-- Ajout d’une **interface MJ** pour consulter, modifier et supprimer des recettes existantes
-- Gestion de **récolte conditionnelle** (heures, rareté, saison…)
-- **Génération aléatoire** de recettes ou ingrédients rares
-- Système d’**amélioration ou de transformation** d’objets
-- Support **multilingue** (FR/EN)
+#### Flux :
+1. Lecture des métiers et des recettes au chargement.
+2. Interface joueur : `forge-ui.html`
+3. Script : `scripts/forge.js`
 
 ---
 
-## 📁 Structure des données
+### 🌿 Récolte
 
-### `worlds/mon-monde/forge-and-fable/recipes.json`
+Accessible via une **macro** ou un bouton d’interface.
+
+- Choisir un lieu de récolte.
+- Voir la liste des objets récoltables dans ce lieu (`data/harvestables.json`).
+- Lancer une action de récolte → objets ajoutés à l’inventaire.
+
+#### Données utilisées :
+- `data/harvestables.json` → lieux et objets récoltables
+
+#### Flux :
+1. Lecture des lieux/items au chargement.
+2. Interface joueur : `harvest-ui.html`
+3. Script : `scripts/harvest.js`
+
+---
+
+### 🛠️ Création de recette (MJ uniquement)
+
+Accessible via un **bouton spécifique réservé au MJ**.
+
+- Remplir le formulaire de nouvelle recette :
+  - Nom de la recette
+  - Métier requis
+  - Ingrédients nécessaires
+  - Outils requis
+  - Résultat (objet créé)
+  - Rareté
+  - Icône (chemin ou par défaut)
+- Sauvegarder → la recette est ajoutée au fichier `data/recipes.json`.
+
+#### Flux :
+1. Interface MJ : `recipe-manager.html`
+2. Script : `scripts/recipe-manager.js`
+3. Sauvegarde : mise à jour du fichier `recipes.json`
+
+⚠️ Attention : en l’état actuel, ce fichier est dans `modules/Forge & Fable/data/`.  
+En cas de mise à jour du module, ce fichier sera **écrasé**. Voir plus bas pour les bonnes pratiques.
+
+---
+
+## Limitations et points importants
+
+- Le fichier suivant est sensible aux mises à jour du module :
+  - `data/harvestables.json`
+
+➡️ **Bonnes pratiques** recommandées :
+- Avant toute mise à jour du module :
+  - **sauvegarder le fichier `data/harvestables.json`**.
+  - Après la mise à jour, **réintégrer le fichier personnalisé**.
+
+➡️ Une future évolution du module pourra permettre de stocker ces fichiers dans le répertoire `worlds/` pour plus de sécurité.
+
+---
+
+## Personnalisation
+
+### Ajouter un métier
+
+Modifier `data/metiers.json`, exemple :
+
+```json
+[
+  "Alchimiste",
+  "Forgeron",
+  "Cuisinier",
+  "Nouveau Métier"
+]
+```
+
+### Ajouter un lieu de récolte
+
+Modifier `data/harvestables.json`, exemple :
+
 ```json
 [
   {
-    "name": "Potion de soin",
-    "metier": "Alchimiste",
-    "tool": "Creuset",
-    "ingredients": [
-      { "name": "Herbe rouge", "qty": 2 },
-      { "name": "Flacon vide", "qty": 1 }
-    ],
-    "result": {
-      "name": "Potion de soin",
-      "description": "Rend quelques points de vie.",
-      "rarity": "Commun"
-    }
+    "lieu": "Forêt enchantée",
+    "items": ["Baie magique", "Herbe rare"]
   }
 ]
+```
+
+### Ajouter une recette (manuellement ou via l'interface MJ)
+
+Modifier `data/recipes.json`, ou utiliser l'interface **Créer recette (MJ)** directement dans Foundry.
+
+---
+
+## 📌 Macros à utiliser
+
+Vous pouvez créer des **macros personnalisées** dans Foundry pour ouvrir les interfaces du module.
+
+### 1️⃣ Ouvrir l'interface de fabrication (Forge)
+
+```js
+// Macro : Ouvrir l'interface de fabrication
+new ForgeApplicationV2().render(true);
+```
+
+### 2️⃣ Ouvrir l'interface de récolte (Harvest)
+
+```js
+// Macro : Ouvrir l'interface de récolte
+new HarvestApplicationV2().render(true);
+```
+
+### 3️⃣ Ouvrir l'interface de création de recette (MJ uniquement)
+
+```js
+// Macro : Ouvrir l'interface de création de recette (MJ)
+if (game.user.isGM) {
+    new RecipeManagerApplicationV2().render(true);
+} else {
+    ui.notifications.warn(game.i18n.localize("FORGE_AND_FABLE.OnlyGM"));
+}
+```
+
+---
+
+## Structure du module
+
+```
+Forge & Fable/
+├── assets/               --> Icônes par défaut
+├── data/                 --> Fichiers métiers, lieux, recettes (⚠️ sensibles aux màj)
+├── scripts/              --> JS pour fabrication, récolte, création
+├── templates/            --> Templates HTML des interfaces
+├── styles.css            --> Style commun
+├── README.md             --> Ce fichier
+└── module.json           --> Déclaration du module
+```
+
+---
+
+## Auteurs
+
+Module développé par **Vekamel**.
+
+---
+
+## Version actuelle
+
+**Forge & Fable v1.4.0 — base officielle du 12/06/2025**
