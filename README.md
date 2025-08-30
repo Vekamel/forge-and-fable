@@ -1,243 +1,80 @@
-# 🛠️ Forge & Fable
+# Forge & Fable
 
-**Module de crafting et récolte pour Foundry VTT v13+**
+**Forge & Fable** est un module pour **Foundry VTT** proposant un système complet de **récolte**, **artisanat** et **gestion de métiers**, immersif et adaptable à tous les univers de jeu de rôle.
 
-*Enrichissez vos sessions de jeu de rôle avec un système d'artisanat accessible et modulaire.*
+## 📦 Fonctionnalités principales
 
----
+- 🎯 Interface de fabrication avec sélection du métier, filtres de rareté, recherche par nom.
+- 🔨 Création de recettes personnalisées via une interface dédiée pour MJ.
+- 🌿 Récolte d’ingrédients en fonction des biomes et outils.
+- 👤 Métiers personnalisés assignables aux personnages joueurs.
+- 📂 Données persistantes automatiquement copiées dans le dossier `world`.
 
-## 📋 Vue d'ensemble
+## 🗂️ Fichiers automatiques créés
 
-Forge & Fable propose trois fonctionnalités principales :
+Au démarrage du monde, le module copie automatiquement dans `worlds/[nom_du_monde]/forge-and-fable/` :
 
-🔨 **Fabrication d'objets** basée sur des recettes et métiers  
-🌿 **Récolte de ressources** dans différents environnements  
-📝 **Création de recettes** par le MJ via une interface dédiée  
+- `recipes.json`
+- `harvestables.json`
+- `metiers.json`
 
-Le système repose sur des fichiers JSON éditables et une interface utilisateur adaptée au style Foundry VTT.
+S'ils n'existent pas, une version par défaut est créée depuis `modules/forge-and-fable/data/`.
 
----
+## ⚙️ Utilisation
 
-## 🚀 Installation
+### 🧰 Fenêtre de Forge (artisanat)
+Permet à un PJ de fabriquer un objet s’il possède les composants requis et les outils nécessaires. Interface dynamique, filtre par rareté et recherche intégrée.
 
-1. **Télécharger** le module depuis le gestionnaire de modules Foundry
-2. **Activer** le module dans les paramètres du monde  
-3. **Créer** les macros nécessaires pour accéder aux fonctionnalités
+### 🌿 Fenêtre de Récolte
+Affiche les ressources disponibles par biome et permet de simuler une action de récolte. Prend en compte l’outil utilisé.
 
----
+### 📜 Fenêtre de Création de Recette (MJ uniquement)
+Interface pour créer une nouvelle recette et l’ajouter directement au fichier `recipes.json` du monde.
 
-## ⚙️ Fonctionnalités détaillées
+## 🧪 Macros utiles
 
-### 🔨 Système de fabrication
-
-Le système de crafting permet aux joueurs de créer des objets en combinant ingrédients et outils requis.
-
-#### Fonctionnement
-
-- ✅ Sélection d'un métier parmi la liste configurée
-- ✅ Choix d'une recette compatible avec le métier  
-- ✅ Vérification automatique de la disponibilité des ingrédients dans l'inventaire
-- ✅ Filtrage par nom de recette et rareté de l'objet final
-- ✅ Consommation automatique des ingrédients lors de la fabrication
-
-#### Interface utilisateur
-
-- 🖼️ Affichage visuel des ingrédients avec icônes
-- 📊 Indication de la quantité possédée vs requise
-- 👁️ Prévisualisation de l'objet à créer avec sa description
-- 🌟 Système de rareté avec codes couleur
-
----
-
-### 🌿 Système de récolte
-
-La récolte permet d'obtenir des ressources depuis différents environnements.
-
-#### Mécanisme
-
-- 🗺️ Sélection d'un biome/environnement
-- 🎲 Génération aléatoire d'un objet parmi ceux disponibles dans ce lieu
-- 📦 Ajout automatique à l'inventaire du personnage
-- 💬 Message dans le chat pour informer les autres joueurs
-
-#### Environnements par défaut
-
-| Environnement | Ressources disponibles |
-|---------------|------------------------|
-| 🌲 **Forêt** | Baies sauvages, Champignon lunaire, Fibre végétale |
-| ⛰️ **Montagne** | Minerai de fer, Quartz brut, Pierre magique |
-| 🐸 **Marais** | Mousse gélatineuse, Herbe noire, Œuf de crapaud |
-
----
-
-### 📝 Création de recettes (MJ)
-
-Interface réservée aux MJ pour enrichir le contenu disponible.
-
-#### Fonctionnalités MJ
-
-- 📋 Formulaire complet de création de recette
-- 👷 Attribution à un métier spécifique
-- 🧪 Définition des ingrédients multiples avec quantités
-- 🔧 Spécification de l'outil requis
-- ⚡ Configuration du résultat (nom, description, rareté)
-- 💾 Sauvegarde automatique dans le système de fichiers du monde
-
----
-
-## 🏗️ Architecture technique
-
-### 📁 Fichiers de données
-
-```
-Structure des données :
-├── 📁 Fichiers statiques (module)
-│   ├── data/metiers.json ──────── Liste des métiers disponibles
-│   └── data/harvestables.json ── Environnements et ressources
-│
-└── 📁 Fichiers dynamiques (monde)
-    └── worlds/[monde]/forge-and-fable/
-        └── recipes.json ──────── Recettes créées par le MJ
-```
-
-### 💻 Scripts principaux
-
-| Fichier | Fonction |
-|---------|----------|
-| `scripts/forge.js` | Gestion de l'interface de fabrication et logique métier |
-| `scripts/harvest.js` | Système de récolte et génération aléatoire |
-| `scripts/recipe-manager.js` | Interface de création pour les MJ |
-
-### 🎨 Templates HTML
-
-- `templates/forge-ui.html` → Interface joueur de fabrication
-- `templates/harvest-ui.html` → Interface de récolte  
-- `templates/recipe-manager.html` → Interface MJ de création
-
----
-
-## 🎮 Utilisation pratique
-
-### 🎯 Macros recommandées
-
-#### Fabrication
-```javascript
+```js
+// Ouvrir la fenêtre de fabrication (nécessite un token sélectionné)
 game.forgeFable.open();
 ```
 
-#### Récolte
-```javascript
+```js
+// Ouvrir la fenêtre de récolte
 game.forgeFable.openHarvest();
 ```
 
-#### Création de recette (MJ uniquement)
-```javascript
-if (game.user.isGM) {
-    game.forgeFable.openRecipeCreator();
-} else {
-    ui.notifications.warn("Accès réservé au MJ");
-}
+```js
+// Ouvrir la fenêtre de création de recette (MJ uniquement)
+game.forgeFable.openRecipeCreator();
 ```
 
-### 🎯 Gestion des ressources
+## 📁 Arborescence du module
 
-Le système vérifie automatiquement :
-
-- ✅ La possession des ingrédients requis
-- ✅ Les quantités suffisantes  
-- ✅ La correspondance entre métier et recette
-- ✅ L'existence des objets dans la base Foundry pour les icônes
-
-### 🎭 Intégration avec les personnages
-
-- 👤 Lecture de l'inventaire du token sélectionné
-- 🔄 Modification automatique des quantités d'objets
-- ➕ Création d'objets inexistants avec propriétés par défaut
-- 💬 Messages de chat intégrés pour le roleplay
-
----
-
-## 🎛️ Configuration et personnalisation
-
-### ➕ Ajout de métiers
-
-Éditer `data/metiers.json` :
-```json
-[
-  "Alchimiste",
-  "Forgeron", 
-  "Cuisinier",
-  "Nouveau Métier"
-]
+```
+forge-and-fable/
+├── assets/
+│   └── default-icon.webp
+├── data/
+│   ├── harvestables.json
+│   ├── metiers.json
+│   └── recipes.json
+├── scripts/
+│   ├── forge.js
+│   ├── harvest.js
+│   └── recipe-manager.js
+├── templates/
+│   ├── forge-ui.html
+│   ├── harvest-ui.html
+│   └── recipe-manager.html
+├── styles.css
+├── module.json
+└── README.md
 ```
 
-### 🗺️ Ajout d'environnements de récolte
+## ✅ Compatibilité
 
-Modifier `data/harvestables.json` :
-```json
-{
-  "nouveau_biome": ["Ressource A", "Ressource B"],
-  "caverne": ["Cristaux", "Minerais précieux"]
-}
-```
+Conçu pour fonctionner avec tous les systèmes compatibles Foundry VTT utilisant des **Actors**, **Items**, et un système de données `system.quantity`.
 
-### 🌟 Système de rareté
+## 🛠️ Installation manuelle
 
-| Rareté | Couleur | Description |
-|--------|---------|-------------|
-| **Commun** | 🔘 Gris | Objets de base |
-| **Inhabituel** | 🟢 Vert | Objets améliorés |
-| **Rare** | 🔵 Bleu | Objets précieux |
-| **Épique** | 🟣 Violet | Objets puissants |
-| **Légendaire** | 🟠 Orange | Objets exceptionnels |
-
----
-
-## ⚠️ Limitations connues
-
-| Limitation | Impact | Solution |
-|------------|--------|----------|
-| **Gestion des icônes** | Fallback vers icône par défaut | Créer des objets dans Foundry |
-| **Vérification des outils** | Affichage uniquement | Évolution future possible |
-| **Intégration système** | Pas de jets de compétence | Modulaire par design |
-| **Persistance** | Fichiers module écrasés | Données dans `/worlds/` |
-
----
-
-## 🚀 Évolutions possibles
-
-**Améliorations suggérées :**
-
-- 🎲 Intégration avec les jets de compétence du système
-- 🔧 Vérification automatique des outils requis  
-- 📈 Système de progression artisanale
-- ⚡ Échecs et réussites critiques en fabrication
-- 📋 Interface de gestion des recettes existantes
-- 📤 Export/import de configurations
-
----
-
-## 📋 Informations techniques
-
-| Propriété | Valeur |
-|-----------|--------|
-| **Version** | 1.4.0 |
-| **Compatibilité** | Foundry VTT v13 |
-| **Auteur** | Vekamel |
-| **Type** | Module autonome |
-
-**Philosophie :** Le module est conçu pour être léger, modulaire et facilement extensible selon les besoins spécifiques de chaque table de jeu.
-
----
-
-## 🤝 Support et communauté
-
-Pour signaler des bugs, proposer des améliorations ou obtenir de l'aide :
-
-- 🐛 **Issues** : Utilisez le système d'issues GitHub
-- 💡 **Suggestions** : Les propositions d'amélioration sont bienvenues  
-- 📖 **Documentation** : Ce README couvre l'essentiel du fonctionnement
-
----
-
-*Forge & Fable - Transformez vos aventures avec un système de crafting immersif*
+Déposez le dossier `forge-and-fable` dans le répertoire `modules/` de votre installation Foundry.
