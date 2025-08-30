@@ -1,7 +1,41 @@
 Hooks.once("ready", async () => {
-  game.forgeFable = game.forgeFable || {};
+  const worldPath = `worlds/${game.world.id}/forge-and-fable/`;
+  const fileName = "metiers.json";
+  const sourcePath = `modules/forge-and-fable/data/${fileName}`;
+  const targetPath = `${worldPath}${fileName}`;
 
-  // Interface joueur
+  // Vérifie si le fichier existe déjà
+  try {
+    const response = await fetch(targetPath);
+    if (response.ok) {
+      console.log(`Forge & Fable : ${fileName} déjà présent.`);
+    } else {
+      throw new Error("Fichier non trouvé.");
+    }
+  } catch {
+    try {
+      // Récupère le fichier source
+      const sourceResponse = await fetch(sourcePath);
+      if (!sourceResponse.ok) throw new Error(`Fichier source introuvable : ${sourcePath}`);
+      const data = await sourceResponse.text();
+      const blob = new Blob([data], { type: "application/json" });
+
+      // Crée le dossier dans world si nécessaire
+      await FilePicker.implementation.browse("data", worldPath)
+        .catch(() => FilePicker.implementation.createDirectory("data", worldPath, {}));
+
+      // Upload
+      await FilePicker.implementation.upload("data", worldPath, new File([blob], fileName), {}, { notify: true });
+
+      console.log(`Forge & Fable : ${fileName} copié dans le world.`);
+      ui.notifications.info(`Forge & Fable : ${fileName} copié automatiquement dans le dossier du monde.`);
+    } catch (error) {
+      console.error(`Forge & Fable : Erreur de copie du fichier ${fileName}`, error);
+      ui.notifications.error(`Forge & Fable : Impossible de copier ${fileName}`);
+    }
+  }
+
+
   game.forgeFable.open = async function () {
     const actor = canvas.tokens.controlled[0]?.actor;
     if (!actor) return ui.notifications.warn("Sélectionnez un token.");
@@ -18,11 +52,9 @@ Hooks.once("ready", async () => {
     }, { classes: ["forge-ui"], width: 600, height: 700, resizable: true }).render(true);
   };
 
-  // Fonction MJ
   game.forgeFable.openRecipeCreator = openRecipeCreationDialog;
 });
 
-// Fonction image fallback
 function getItemImageByName(name) {
   const item = game.items.getName(name);
   const img = item?.img;
@@ -32,17 +64,14 @@ function getItemImageByName(name) {
   return img;
 }
 
-forge.js //// Ajout du tri
-
-// Logique interface joueur
 function setupLogic(html, actor, allRecipes) {
   const metierSelect = html.find("#metier");
   const recetteSelect = html.find("#recette");
   const ingredientsDiv = html.find("#ingredients");
   const resultDiv = html.find("#resultat");
   const craftBtn = html.find("#craft-button");
+  const outilDiv = html.find("#outil");
 
-  // Ajout : sélectionner les nouveaux filtres
   const recetteSearch = html.find("#recette-search");
   const rareteFilter = html.find("#rarete-filter");
 
@@ -62,7 +91,7 @@ function setupLogic(html, actor, allRecipes) {
     }
 
     recetteSelect.empty();
-    filtered.forEach((r, i) => recetteSelect.append(`<option value="${i}">${r.name}</option>`));
+    filtered.forEach((r, i) => recetteSelect.append('<option value="' + i + '">' + r.name + '</option>'));
     recetteSelect.data("filtered", filtered);
     updateRecette();
   }
@@ -78,32 +107,43 @@ function setupLogic(html, actor, allRecipes) {
       const owned = actor.items.find(i => i.name === ing.name)?.system?.quantity || 0;
       const enough = owned >= ing.qty;
       const iconPath = getItemImageByName(ing.name);
-      ingredientsDiv.append(`
-        <div class="ingredient ${enough ? "ok" : "missing"}" style="display: flex; align-items: center; gap: 0.5rem;">
-          <img src="${iconPath}" width="32" height="32" />
-          <span>${ing.qty} × ${ing.name} (Possédé : ${owned})</span>
-        </div>
-      `);
+      ingredientsDiv.append(
+        '<div class="ingredient ' + (enough ? "ok" : "missing") + '" style="display: flex; align-items: center; gap: 0.5rem;">' +
+        '<img src="' + iconPath + '" width="32" height="32" />' +
+        '<span>' + ing.qty + ' × ' + ing.name + ' (Possédé : ' + owned + ')</span>' +
+        '</div>'
+      );
     });
 
+    outilDiv.empty();
+    if (recipe.tool) {
+      const owned = actor.items.find(i => i.name === recipe.tool)?.system?.quantity || 0;
+      const toolImg = getItemImageByName(recipe.tool);
+      outilDiv.append(
+        '<div class="outil" style="display: flex; align-items: center; gap: 0.5rem;">' +
+        '<img src="' + toolImg + '" width="32" height="32" />' +
+        '<span>1 × ' + recipe.tool + ' (Possédé : ' + owned + ')</span>' +
+        '</div>'
+      );
+    } else {
+      outilDiv.append("<em>Aucun outil requis.</em>");
+    }
+
     const img = getItemImageByName(recipe.result.name);
-    const toolImg = getItemImageByName(recipe.tool);
+    resultDiv.html(
+      '<img src="' + img + '" />' +
+      '<h3 class="rarity ' + recipe.result.rarity + '">' + recipe.result.name + '</h3>' +
+      '<p>' + recipe.result.description + '</p>' +
+      '<p><strong>Rareté :</strong> ' + recipe.result.rarity + '</p>'
+    );
 
-    resultDiv.html(`
-      <img src="${img}" />
-      <h3 class="rarity ${recipe.result.rarity}">${recipe.result.name}</h3>
-      <p>${recipe.result.description}</p>
-      <p><strong>Rareté :</strong> ${recipe.result.rarity}</p>
-      <div style="margin-top:0.5rem; display: flex; align-items: center; gap: 0.5rem;">
-        <img src="${toolImg}" />
-        <span>Outil requis : ${recipe.tool}</span>
-      </div>
-    `);
-
-    const canCraft = recipe.ingredients.every(ing => {
+    const hasIngredients = recipe.ingredients.every(ing => {
       const owned = actor.items.find(i => i.name === ing.name)?.system?.quantity || 0;
       return owned >= ing.qty;
     });
+
+    const hasTool = !recipe.tool || (actor.items.find(i => i.name === recipe.tool)?.system?.quantity || 0) >= 1;
+    const canCraft = hasIngredients && hasTool;
 
     craftBtn.prop("disabled", !canCraft);
   }
@@ -140,102 +180,18 @@ function setupLogic(html, actor, allRecipes) {
     ChatMessage.create({
       user: game.user.id,
       speaker: ChatMessage.getSpeaker({ actor }),
-      content: `<strong>${actor.name}</strong> vient de fabriquer <em>${recipe.result.name}</em> !`
+      content: '<strong>' + actor.name + '</strong> vient de fabriquer <em>' + recipe.result.name + '</em> !'
     });
 
-    ui.notifications.info(`Objet fabriqué : ${recipe.result.name}`);
+    ui.notifications.info("Objet fabriqué : " + recipe.result.name);
     updateRecette();
   }
 
   metierSelect.on("change", refreshRecettes);
   recetteSelect.on("change", updateRecette);
   craftBtn.on("click", craft);
-
-  // Ajout : events sur les nouveaux filtres
   recetteSearch.on("input", refreshRecettes);
   rareteFilter.on("change", refreshRecettes);
 
   if (metierSelect.val()) refreshRecettes();
-}
-
-// Interface MJ – Dialog redimensionnable
-function openRecipeCreationDialog() {
-  if (!game.user.isGM) return ui.notifications.warn("Seul un MJ peut créer une recette.");
-
-  const content = renderTemplate("modules/forge-and-fable/templates/recipe-manager.html");
-
-  content.then(html => {
-    const dialog = new Dialog({
-      title: "Création de recette – Forge & Fable",
-      content: html,
-      buttons: {},
-      render: html => {
-        html.find(".add-ingredient").on("click", () => {
-          const container = html.find(".ingredients-list");
-          const newRow = $(`<div class="ingredient" style="display: flex; gap: 0.5rem;">
-              <input type="text" placeholder="Nom" name="ingredient-name" class="form-control" />
-              <input type="number" placeholder="Qté" name="ingredient-qty" class="form-control" style="width: 60px;" min="1" value="1" />
-            </div>`);
-          container.append(newRow);
-        });
-
-        html.find("form").on("submit", async ev => {
-          ev.preventDefault();
-          const form = new FormData(ev.target);
-          const ingredients = [];
-          const names = html.find("input[name='ingredient-name']").map((i, el) => el.value).get();
-          const qtys = html.find("input[name='ingredient-qty']").map((i, el) => el.value).get();
-
-          for (let i = 0; i < names.length; i++) {
-            if (names[i]) ingredients.push({ name: names[i], qty: parseInt(qtys[i]) || 1 });
-          }
-
-          const newRecipe = {
-            name: form.get("name"),
-            metier: form.get("metier"),
-            tool: form.get("tool"),
-            ingredients,
-            result: {
-              name: form.get("result-name"),
-              description: form.get("result-description"),
-              rarity: form.get("result-rarity")
-            }
-          };
-
-          const folder = `worlds/${game.world.id}/forge-and-fable/`;
-          const path = `${folder}recipes.json`;
-          const filename = "recipes.json";
-
-          // Vérifie si le dossier existe et le crée si nécessaire
-          await FilePicker.implementation.browse("data", folder)
-            .catch(async () => {
-              await FilePicker.implementation.createDirectory("data", folder, {});
-            });
-
-          // Charge les données existantes ou crée une nouvelle liste
-          let existing = [];
-          try {
-            const response = await fetch(path);
-            existing = await response.json();
-          } catch (e) {
-            existing = [];
-          }
-
-          existing.push(newRecipe);
-          const blob = new Blob([JSON.stringify(existing, null, 2)], { type: "application/json" });
-
-          await FilePicker.implementation.upload("data", folder, new File([blob], filename), {}, { notify: true });
-          ui.notifications.info("Recette ajoutée dans le monde !");
-          dialog.close();
-        });
-      }
-    }, {
-      width: 700,
-      height: "auto",
-      resizable: true,
-      classes: ["forge-ui"]
-    });
-
-    dialog.render(true);
-  });
 }

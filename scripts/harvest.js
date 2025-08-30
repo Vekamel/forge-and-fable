@@ -1,11 +1,37 @@
-Hooks.once("ready", () => {
+Hooks.once("ready", async () => {
   game.forgeFable = game.forgeFable || {};
 
+  // Vérifie et copie le fichier harvestables.json dans le monde si absent
+  const folderPath = "worlds/" + game.world.id + "/forge-and-fable";
+  const filePath = folderPath + "/harvestables.json";
+  const modulePath = "modules/forge-and-fable/data/harvestables.json";
+
+  try {
+    await fetch(filePath).then(r => r.json());
+    console.log("Forge & Fable | harvestables.json déjà présent dans le monde.");
+  } catch (e) {
+    console.warn("Forge & Fable | harvestables.json manquant dans le monde. Copie en cours...");
+    try {
+      await FilePicker.browse("data", folderPath);
+    } catch (e) {
+      await FilePicker.implementation.createDirectory("data", folderPath);
+    }
+    const content = await fetch(modulePath).then(r => r.text());
+    const blob = new Blob([content], { type: "application/json" });
+    await FilePicker.implementation.upload("data", folderPath, new File([blob], "harvestables.json"));
+    ui.notifications.info("Forge & Fable : harvestables.json copié dans le monde.");
+  }
+
+  // Interface de récolte
   game.forgeFable.openHarvest = async function () {
     const actor = canvas.tokens.controlled[0]?.actor;
     if (!actor) return ui.notifications.warn("Sélectionnez un token.");
 
-    const biomes = await fetch("modules/forge-and-fable/data/harvestables.json").then(r => r.json());
+    const biomes = await fetch(filePath).then(r => r.json()).catch(() => {
+      ui.notifications.error("Impossible de charger les biomes.");
+      return {};
+    });
+
     const biomeList = Object.keys(biomes);
     const content = await renderTemplate("modules/forge-and-fable/templates/harvest-ui.html");
 
@@ -33,7 +59,6 @@ Hooks.once("ready", () => {
           }
 
           const picked = pool[Math.floor(Math.random() * pool.length)];
-
           const existing = actor.items.find(i => i.name === picked);
           const img = game.items.getName(picked)?.img || "modules/forge-and-fable/assets/default-icon.webp";
 

@@ -10,17 +10,17 @@
       {{/each}}
     </select>
 
-<div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-  <input type="text" id="recette-search" placeholder="Rechercher une recette..." class="form-control" />
-  <select id="rarete-filter" class="form-control">
-    <option value="">Toutes raretés</option>
-    <option value="Commun">Commun</option>
-    <option value="Inhabituel">Inhabituel</option>
-    <option value="Rare">Rare</option>
-    <option value="Épique">Épique</option>
-    <option value="Légendaire">Légendaire</option>
-  </select>
-</div>
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+      <input type="text" id="recette-search" placeholder="Rechercher une recette..." class="form-control" />
+      <select id="rarete-filter" class="form-control">
+        <option value="">Toutes raretés</option>
+        <option value="Commun">Commun</option>
+        <option value="Inhabituel">Inhabituel</option>
+        <option value="Rare">Rare</option>
+        <option value="Épique">Épique</option>
+        <option value="Légendaire">Légendaire</option>
+      </select>
+    </div>
 
     <label for="recette"><strong>Recettes :</strong></label>
     <select id="recette"></select>
@@ -29,6 +29,11 @@
   <fieldset class="section">
     <legend>Ingrédients requis</legend>
     <div id="ingredients"></div>
+  </fieldset>
+
+  <fieldset class="section">
+    <legend>Outil requis</legend>
+    <div id="outil"></div>
   </fieldset>
 
   <fieldset class="section">

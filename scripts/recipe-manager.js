@@ -1,5 +1,32 @@
-Hooks.once("ready", () => {
+Hooks.once("ready", async () => {
   game.forgeFable = game.forgeFable || {};
+
+  // 📁 Chemin monde
+  const worldPath = `worlds/${game.world.id}/forge-and-fable/`;
+  const recipeFile = "recipes.json";
+  const filePath = `${worldPath}${recipeFile}`;
+
+  // 📄 Vérifie si recipes.json existe, sinon le créer vide
+  try {
+    const response = await fetch(filePath);
+    if (!response.ok) throw new Error("Not found");
+  } catch (e) {
+    console.log("Forge & Fable | recipes.json non trouvé, création d’un fichier vide…");
+
+    try {
+      // Crée le dossier s'il n'existe pas
+      await FilePicker.browse("data", worldPath);
+    } catch {
+      await FilePicker.implementation.createDirectory("data", worldPath, {});
+    }
+
+    // Upload fichier vide
+    const blob = new Blob([JSON.stringify([], null, 2)], { type: "application/json" });
+    await FilePicker.implementation.upload("data", worldPath, new File([blob], recipeFile), {}, { notify: true });
+
+    console.log("Forge & Fable | recipes.json vide créé dans le monde.");
+  }
+
 
   game.forgeFable.openRecipeCreator = async function () {
     if (!game.user.isGM) {
@@ -78,16 +105,17 @@ Hooks.once("ready", () => {
         }
       },
       render: (html) => {
-        html.find(".add-ingredient").on("click", () => {
-          const container = html.find(".ingredients-list");
-          const row = $(`
-            <div class="ingredient" style="display: flex; gap: 0.5rem;">
-              <input type="text" placeholder="${game.i18n.localize("FORGEFABLE.PlaceholderName")}" name="ingredient-name" class="form-control" />
-              <input type="number" placeholder="Qté" name="ingredient-qty" class="form-control" style="width: 60px;" min="1" value="1" />
-            </div>`);
-          container.append(row);
-        });
-      },
+  html.find(".add-ingredient").on("click", () => {
+    const container = html.find(".ingredients-list");
+    const row = $(`
+      <div class="ingredient" style="display: flex; gap: 0.5rem;">
+        <input type="text" placeholder="Nom" name="ingredient-name" class="form-control" />
+        <input type="number" placeholder="Qté" name="ingredient-qty" class="form-control" style="width: 60px;" min="1" value="1" />
+      </div>`);
+    container.append(row);
+  });
+},
+
       default: "submit"
     }, {
       width: 700,

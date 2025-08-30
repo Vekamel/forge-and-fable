@@ -1,5 +1,6 @@
 {
-  "forêt": ["Baies sauvages", "Champignon lunaire", "Fibre végétale"],
-  "montagne": ["Minerai de fer", "Quartz brut", "Pierre magique"],
-  "marais": ["Mousse gélatineuse", "Herbe noire", "Œuf de crapaud"]
+  "Forêt": ["Baies sauvages", "Champignon lunaire", "Fibre végétale"],
+  "Montagne": ["Minerai de fer", "Quartz brut", "Pierre magique"],
+  "Marais": ["Mousse gélatineuse", "Herbe noire", "Œuf de crapaud"],
+  "Ciel": ["Mousse gélatineuse", "Herbe noire", "Œuf de crapaud"]
 }

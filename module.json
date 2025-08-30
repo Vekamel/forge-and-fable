@@ -1,16 +1,17 @@
 {
   "id": "forge-and-fable",
   "title": "Forge & Fable",
-  "description": "Module simplifi\u00e9 de crafting pour Foundry VTT.",
+  "description": "Module simplifié de crafting pour Foundry VTT.",
   "version": "1.5.0",
   "compatibility": {
-    "minimum": "12",
-    "verified": "13",
+    "minimum": "13",
+    "verified": "13.347",
     "maximum": "14"
   },
   "authors": [
     {
-      "name": "Vekamel"
+      "name": "Vekamel",
+      "flags": {}
     }
   ],
   "scripts": [
@@ -19,23 +20,27 @@
     "scripts/harvest.js"
   ],
   "styles": [
-    "styles.css"
+    {
+      "src": "styles.css"
+    }
   ],
-  "languages": [],
-
   "media": [
-  {
-    "type": "cover",
-    "url": "https://i.imgur.com/OCftw8l.png",
-    "caption": "Forge & Fable"
-  },
-  {
-    "type": "setup",
-    "url": "https://i.imgur.com/OCftw8l.png"
-  }
-],
-  "packs": [],
+    {
+      "type": "cover",
+      "url": "https://i.imgur.com/OCftw8l.png",
+      "caption": "Forge & Fable",
+      "loop": false,
+      "flags": {}
+    },
+    {
+      "type": "setup",
+      "url": "https://i.imgur.com/OCftw8l.png",
+      "loop": false,
+      "flags": {}
+    }
+  ],
   "manifest": "https://raw.githubusercontent.com/Vekamel/forge-and-fable/main/module.json",
   "download": "https://github.com/Vekamel/forge-and-fable/releases/download/v1.5.0/Forge.Fable.V1.5.0.zip",
-  "url": "https://github.com/Vekamel/forge-and-fable"
+  "url": "https://github.com/Vekamel/forge-and-fable",
+  "flags": {}
 }
